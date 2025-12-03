@@ -5,25 +5,30 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
+import requests
+import io
+
 
 st.set_page_config(page_title="Car Price ML App", layout="wide")
 
-
 @st.cache_resource
-def load_artifacts(path="./car_price_model.pkl"):
-    with open(path, "rb") as f:
-        artifacts = pickle.load(f)
+def load_artifacts_from_url():
+    url = "https://raw.githubusercontent.com/DimitrisNikis/Machine-Learning-Course/main/HW/HW01/car_price_model.pkl"
+    response = requests.get(url)
+    response.raise_for_status()
+    buffer = io.BytesIO(response.content)
+    artifacts = pickle.load(buffer)
     return artifacts
 
 
 @st.cache_data
 def load_train_data():
-    url = "https://raw.githubusercontent.com/Murcha1990/MLDS_ML_2022/main/Hometasks/HT1/cars_train.csv"
+    url = "https://raw.githubusercontent.com/DimitrisNikis/Machine-Learning-Course/main/HW/HW01/train_EDA.csv"
     df = pd.read_csv(url)
     return df
 
 
-artifacts = load_artifacts()
+artifacts = load_artifacts_from_url()
 model = artifacts["model"]
 ohe = artifacts["ohe"]
 scaler = artifacts["scaler"]
