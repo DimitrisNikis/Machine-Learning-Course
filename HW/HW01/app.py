@@ -10,7 +10,7 @@ st.set_page_config(page_title="Car Price ML App", layout="wide")
 
 
 @st.cache_resource
-def load_artifacts(path="car_price_model.pkl"):
+def load_artifacts(path="./car_price_model.pkl"):
     with open(path, "rb") as f:
         artifacts = pickle.load(f)
     return artifacts
@@ -67,7 +67,16 @@ def full_preprocess(df: pd.DataFrame):
     df["seats"] = df["seats"].astype(int)
 
     X_num = df[num_cols].astype(float)
-    X_cat = df[cat_cols].astype(str)
+    
+    X_cat = df[cat_cols].copy()
+
+    for i, col in enumerate(cat_cols):
+        trained_types = type(ohe.categories_[i][0])
+
+        if np.issubdtype(trained_types, np.integer):
+            X_cat[col] = X_cat[col].astype(int)
+        else:
+            X_cat[col] = X_cat[col].astype(str)
 
     X_cat_ohe = ohe.transform(X_cat)
     ohe_feature_names = ohe.get_feature_names_out(cat_cols)
