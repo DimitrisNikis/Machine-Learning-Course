@@ -4,6 +4,10 @@
 
 -------
 
+## Приложение на StreamlitHub
+
+Приложение находится [здесь](https://machine-learning-course-dimitris-nikis-hw-01.streamlit.app/)
+
 ## Запуск Streamlit-приложения
 
 ```
@@ -21,6 +25,8 @@ streamlit run app.py
 2. `pkl`-файл с лучшей моделью
 3. `app.py` — Streamlit-приложение
 4. Отчёт `README` c результатами
+5. `requirements` — файл с зависимостями
+6. `train_EDA` — итоговый `csv`-файл для EDA
 
 ## Что было сделано
 
