@@ -188,6 +188,14 @@ with tab_predict:
                 result["predicted_price"] = preds
                 st.success("Предсказания готовы!")
                 st.dataframe(result.head())
+                
+                csv_out = result.to_csv(index=False).encode("utf-8")
+                st.download_button(
+                    label="⬇ Скачать результаты в CSV",
+                    data=csv_out,
+                    file_name="car_price_predictions.csv",
+                    mime="text/csv",
+                )
     else:
         st.subheader("Ручной ввод признаков")
 
