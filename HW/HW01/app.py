@@ -162,9 +162,25 @@ with tab_predict:
         )
 
         if uploaded_file is not None:
-            df_new = pd.read_csv(uploaded_file)
+            try:
+                df_new = pd.read_csv(uploaded_file)
+            except Exception:
+                st.error("Ошибка: файл не является корректным CSV!")
+                st.stop()
+                
             st.write("Загруженные данные:")
             st.dataframe(df_new.head())
+            
+            if df_new.isna().any().any():
+                st.warning("Обнаружены пропуски в данных — строки с NaN будут удалены.")
+                df_new = df_new.dropna()
+            
+            required_cols = set(num_cols + cat_cols)
+            missing = required_cols - set(df_new.columns)
+
+            if missing:
+                st.error(f"В CSV не хватает колонок: {missing}")
+                st.stop()
 
             if st.button("Сделать предсказания"):
                 preds = predict_df(df_new)
